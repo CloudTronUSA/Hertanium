@@ -8,12 +8,14 @@ private:
     int centerX;  // X-coordinate of the circle's center
     int centerY;  // Y-coordinate of the circle's center
     int radius;   // Radius of the circle
-    int oldX;     // X-coordinate of the previous line end
-    int oldY;     // Y-coordinate of the previous line end
+    int actOldX;     // X-coordinate of the previous line end
+    int actOldY;     // Y-coordinate of the previous line end
+    int expOldX;     // X-coordinate of the previous line end
+    int expOldY;     // Y-coordinate of the previous line end
 
 public:
     DirectionDisplay(int x, int y, int r);
-    void update(double angle, int speed);
+    void update(double actAngle, int actSpeed, double expAngle, int expSpeed);
     void init();
 };
 

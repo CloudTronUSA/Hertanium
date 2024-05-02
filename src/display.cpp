@@ -11,24 +11,40 @@ DirectionDisplay::DirectionDisplay(int x, int y, int r)
 }
 
 // Update the direction and magnitude based on controller input
-void DirectionDisplay::update(double angle, int speed) {
+void DirectionDisplay::update(double actAngle, int actSpeed, double expAngle, int expSpeed) {
+    
+    // actual direction
     // Calculate the end coordinates of the line inside the circle
-    double radians = angle * (3.14159265 / 180);
+    double actRadians = (-actAngle + 90) * (3.14159265 / 180);
     // Adjust scaling factor from 0.5 to a value that matches the new radius
-    int lineLength = speed * ((radius-5)*0.01); // Adjust this factor so that speed of 100 roughly reaches the circle edge
-    int newX = centerX + (lineLength * cos(radians));
-    int newY = centerY - (lineLength * sin(radians)); // Y is inverted (screen coordinates)
+    int actLineLength = actSpeed * ((radius-5)*0.01);
+    int actNewX = centerX + (actLineLength * cos(actRadians));
+    int actNewY = centerY - (actLineLength * sin(actRadians)); // Y is inverted (screen coordinates)
+
+    // expected direction
+    // Calculate the end coordinates of the line inside the circle
+    double expRadians = (-expAngle + 90) * (3.14159265 / 180);
+    // Adjust scaling factor from 0.5 to a value that matches the new radius
+    int expLineLength = expSpeed * ((radius-5)*0.01);
+    int expNewX = centerX + (expLineLength * cos(expRadians));
+    int expNewY = centerY - (expLineLength * sin(expRadians)); // Y is inverted (screen coordinates)
 
     // clear the previous line
     Brain.Screen.setPenColor(color::black);
-    Brain.Screen.drawLine(centerX, centerY, oldX, oldY);
+    Brain.Screen.drawLine(centerX, centerY, actOldX, actOldY);
+    Brain.Screen.drawLine(centerX, centerY, expOldX, expOldY);
 
     // draw the new line
     Brain.Screen.setPenColor(color::white);
-    Brain.Screen.drawLine(centerX, centerY, newX, newY);
+    Brain.Screen.drawLine(centerX, centerY, actNewX, actNewY);
+    Brain.Screen.setPenColor(color::blue);
+    Brain.Screen.drawLine(centerX, centerY, expNewX, expNewY);
 
-    oldX = newX;
-    oldY = newY;
+    // Update the old coordinates
+    actOldX = actNewX;
+    actOldY = actNewY;
+    expOldX = expNewX;
+    expOldY = expNewY;
 }
 
 // Initialize the display
